@@ -282,6 +282,25 @@
     padding: 20px;
   }
 
+  .pres-click-zone {
+    position: fixed;
+    top: 0;
+    bottom: 60px;
+    width: 50%;
+    z-index: 205;
+    cursor: pointer;
+  }
+
+  .pres-click-zone.left {
+    left: 0;
+    cursor: w-resize;
+  }
+
+  .pres-click-zone.right {
+    right: 0;
+    cursor: e-resize;
+  }
+
   .pres-slide-container object {
     max-width: 100%;
     max-height: 100%;
@@ -378,6 +397,8 @@
 
 <!-- Presentation Mode -->
 <div class="presentation" id="presView">
+  <div class="pres-click-zone left" onclick="presNav(-1)"></div>
+  <div class="pres-click-zone right" onclick="presNav(1)"></div>
   <div class="pres-slide-container" id="presSlide"></div>
   <div class="notes-panel" id="notesPanel">
     <div class="notes-title">Speaker Notes</div>

@@ -22,20 +22,25 @@ Handle content authoring: structured outline creation using Pyramid Principle an
 
 ## Inputs
 - `run_dir`
-- `mode`: `outline` | `draft`
+- `mode`: `outline` | `revise` | `draft`
+- `feedback`: (revise mode only) user's modification instructions (e.g. "把第三部分移到前面", "remove slide 8", "add a comparison slide after slide 4")
 
 ## Outputs
 - `mode=outline`: `${run_dir}/outline.json` + `${run_dir}/outline-preview.md`
+- `mode=revise`: updated `${run_dir}/outline.json` + `${run_dir}/outline-preview.md`
 - `mode=draft`: `${run_dir}/drafts/slide-{nn}.svg` + `${run_dir}/draft-manifest.json`
 
 ## Execution
-1. Read `${run_dir}/requirements.md` and `${run_dir}/materials.md`.
+1. Read `${run_dir}/input.md` for page range (`--pages`), style (`--style`), and other flags.
+   Read `${run_dir}/requirements.md` and `${run_dir}/materials.md`.
 2. Send `heartbeat` when starting and before writing final output.
 3. Route by `mode`:
    - `outline`:
      - Read the Pyramid Principle prompt from `skills/_shared/references/prompts/outline-architect.md` (relative to plugin root).
      - Check `${run_dir}/requirements.md` for presentation purpose. Apply the Framework Selection heuristic from `outline-architect.md` to choose the optimal structural framework. Default to Pyramid Principle if purpose is unclear.
      - Apply the methodology: 结论先行, 以上统下, 归类分组, 逻辑递进.
+     - Respect the page range from `input.md` (e.g. `--pages=10-15`). Ensure `total_pages` in the generated outline falls within the specified range. If content naturally requires fewer or more pages, stay within ±1 of the range boundaries.
+     - Consider the `--style` from `input.md` when selecting `layout_type` for each page. Different styles favor different layouts (e.g. `minimal` favors `single_focus` and `two_column_symmetric`; `creative` favors `hero_grid` and `mixed_grid`).
      - Generate `outline.json` following the **full schema** defined in `skills/_shared/references/prompts/outline-architect.md` (the single source of truth for outline structure). Required fields include: `title`, `subtitle`, `total_pages`, `cover`, `table_of_contents`, `parts[{ title, key_message, pages[{ index, title, subtitle, type, layout_type, key_points, data_elements, notes }] }]`, `end_page`.
      - The `data_elements` array in each page should use typed entries:
        ```json
@@ -53,6 +58,18 @@ Handle content authoring: structured outline creation using Pyramid Principle an
        - **Slide cards**: One ASCII box per slide showing `#NN`, layout type tag, title, and content zones.
        - **Part separators**: `═══` divider between logical parts with `KEY MESSAGE` annotation.
        - **Footer**: Slide type distribution table and total count.
+     - Send `outline_ready` to lead.
+   - `revise`:
+     - Read the existing `${run_dir}/outline.json` as the baseline.
+     - Parse `feedback` from prompt args — this is the user's modification instruction.
+     - Apply incremental changes to the existing outline instead of regenerating from scratch:
+       - **Reorder**: move parts/pages to new positions, re-index all page `index` fields.
+       - **Add**: insert new pages with appropriate `type` and `layout_type`, derive content from `materials.md`.
+       - **Remove**: delete specified pages, re-index remaining.
+       - **Modify**: update title, key_points, type, or layout_type of specific pages.
+     - Preserve unchanged parts/pages exactly as-is (do not regenerate content that wasn't requested to change).
+     - Update `total_pages` to reflect the new count. Validate it still falls within the page range from `input.md`.
+     - Regenerate `outline-preview.md` from the updated outline.
      - Send `outline_ready` to lead.
    - `draft`:
      - Read `${run_dir}/outline.json` for page structure.
@@ -73,5 +90,6 @@ Handle content authoring: structured outline creation using Pyramid Principle an
 - Keep SVG generation deterministic and simple for the draft phase.
 
 ## Verification
-- `mode=outline`: `outline.json` is valid JSON with all required fields; `outline-preview.md` renders cleanly.
+- `mode=outline`: `outline.json` is valid JSON with all required fields; `total_pages` within `--pages` range; `outline-preview.md` renders cleanly.
+- `mode=revise`: updated `outline.json` reflects user feedback; unchanged pages preserved; page indices sequential; `outline-preview.md` regenerated.
 - `mode=draft`: All SVGs have `viewBox="0 0 1280 720"` and valid SVG structure.

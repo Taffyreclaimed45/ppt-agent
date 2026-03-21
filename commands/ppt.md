@@ -135,7 +135,11 @@ Generate professional PPT slides as SVG files (1280x720) through a structured mu
    User can approve, adjust page order, add/remove sections, or change emphasis.
    Do NOT proceed until user approves.
 
-3. If user requests changes, re-run content-core with adjusted requirements.
+3. If user requests changes, re-run content-core in **revise** mode with the user's feedback:
+   ```text
+   Task(subagent_type="ppt-agent:content-core", prompt="run_dir=${RUN_DIR} mode=revise feedback=${USER_FEEDBACK}")
+   ```
+   content-core applies incremental changes to the existing `outline.json` (reorder, add, remove, modify) instead of regenerating from scratch. Then re-present the updated outline to the user for approval. Repeat until user approves.
 
 ## Phase 5: Planning Draft (策划稿)
 
@@ -202,7 +206,7 @@ For each slide (or in batches):
    If holistic score < 7, flag specific issues for manual review but do not block delivery.
 
 5. **Write review manifest** (`${RUN_DIR}/review-manifest.json`):
-   After holistic review completes, the lead aggregates all review results into a single checkpoint artifact:
+   After holistic review completes, the lead **aggregates from `slide-status.json`** and appends holistic results into the final checkpoint artifact. Do not re-parse individual `reviews/review-{nn}.md` files — all per-slide scores and statuses are already in `slide-status.json`:
    ```json
    {
      "total_slides": 12,
@@ -274,7 +278,8 @@ For each slide (or in batches):
    - **Scroll**: vertical full-width scroll through all slides
    - **Present**: fullscreen presentation with keyboard navigation
 
-   Keyboard shortcuts: `P` present / `G` gallery / `S` scroll / `F` fullscreen / `N` notes / `←→` navigate / `Esc` exit
+   Navigation: click left/right half of the screen or use `←→` keys to navigate slides in presentation mode.
+   Keyboard shortcuts: `P` present / `G` gallery / `S` scroll / `F` fullscreen / `N` notes / `Esc` exit
 
 4. **Generate speaker notes** (`${RUN_DIR}/output/speaker-notes.md`):
    Read `${RUN_DIR}/outline.json` and extract all `notes` fields. Format as a markdown document indexed by slide number:

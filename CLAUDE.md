@@ -56,7 +56,8 @@ The delivery phase generates an interactive `index.html` alongside the SVG files
 | `{{SLIDES_JSON}}` | JSON array from outline.json | `[{"file":"slide-01.svg","label":"封面"}]` |
 
 Preview modes: Gallery (thumbnail grid) / Scroll (vertical) / Present (fullscreen).
-Keyboard: `P` present / `G` gallery / `S` scroll / `F` fullscreen / `←→` navigate / `Esc` exit.
+Navigation: click left/right half of screen or `←→` keys to navigate slides.
+Keyboard: `P` present / `G` gallery / `S` scroll / `F` fullscreen / `N` notes / `Esc` exit.
 
 ## Quality Gates
 
