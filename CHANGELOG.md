@@ -13,6 +13,8 @@
 - **Gemini intermediate artifacts preserved**: Raw Gemini outputs (`gemini-raw-*.md`) are kept in `${RUN_DIR}/reviews/` for traceability and debugging.
 - **research-core agent**: Replaced `agent-reach` CLI dependency with probe-first flow — detects available tools at runtime and selects the best search method per platform.
 - **README showcase**: Add GPT-5.4 OpenCode comparison entry and slide gallery references.
+- **Documentation contracts synchronized**: Refresh `llmdoc/`, `README.md`, and `CLAUDE.md` to match the current workflow contracts for style registry discovery, `--run-id` resume behavior, `outline.json.approved`, batched `draft_slides_ready`, and delivery artifacts.
+- **Review fallback docs corrected**: Update maintainer- and user-facing docs to reflect the real Gemini-unavailable behavior — technical validation only, with no fabricated aesthetic optimization loop.
 
 ### Removed
 - **Legacy Xiaomi SU7 example bundles**: Remove archived `ppt-xiaomi-su7-2026`, `ppt-xiaomi-su7-launch`, and `ppt-xiaomi-su7-new-launch` assets.
