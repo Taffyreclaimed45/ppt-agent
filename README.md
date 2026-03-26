@@ -81,9 +81,12 @@ claude plugin install ppt-agent
 
 | 参数 | 默认值 | 说明 |
 |------|--------|------|
-| `--style` | business | 风格预设：business / tech / creative / minimal |
+| `--style` | business | 风格预设；实际可用值以 `skills/_shared/index.json` 中 `domain=style` 的注册表为准 |
 | `--brand-colors` | 无 | 品牌色彩 YAML 文件路径 |
 | `--pages` | 10-15 | 目标页数范围 |
+| `--run-id` | 自动生成 | 恢复已有运行目录，按已有产物断点续跑 |
+
+当前内置 style 注册表包含 17 个风格：`business`、`tech`、`creative`、`minimal`、`blueprint`、`bold-editorial`、`chalkboard`、`editorial-infographic`、`fantasy-animation`、`intuition-machine`、`notion`、`pixel-art`、`scientific`、`sketch-notes`、`vector-illustration`、`vintage`、`watercolor`。
 
 ### 品牌色彩自定义
 
@@ -108,6 +111,8 @@ brand:
 5. **规划草稿** — 每页生成简版 SVG 草稿
 6. **设计稿 + 审查** — Bento Grid SVG 生成 + Gemini 质量审查循环
 7. **交付** — 最终 SVG 文件 + 交互式 HTML 预览页（Hard Stop）
+
+说明：当 Gemini 不可用时，审查阶段会降级为**技术校验模式**，继续检查 XML、`viewBox`、字号下限、安全边距、对比度与样式 token 合规性，但不再生成审美优化建议。
 
 ## 智能体
 
@@ -151,6 +156,8 @@ openspec/changes/<run_id>/
 | 布局评分 | ≥ 6 | ≥ 8 |
 | 可读性 | ≥ 6 | ≥ 8 |
 | 修复轮次 | ≤ 2 | 0 |
+
+补充说明：以上加权评分门槛适用于 Gemini 可用时的完整审查链路；若进入技术校验模式，则以硬规则通过/失败作为放行标准，不生成审美分数。
 
 ## 跨平台适配路线图
 
